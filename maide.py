@@ -1,20 +1,32 @@
+import sys
+import os
 from random import randint
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
-import sys
-import os
+
+def resource_path(relative_path):
+    """Retorna o caminho absoluto para o arquivo, funcionando em script e em executável PyInstaller."""
+    try:
+        base_path = sys._MEIPASS  # Pasta temporária criada pelo PyInstaller
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class MinhaJanela(QMainWindow):
     def __init__(self):
         super(MinhaJanela, self).__init__()
 
+        # Caminho absoluto para o arquivo .ui
+        ui_path = resource_path("adivinha.ui")
+
         # Verifica se o arquivo .ui existe
-        if not os.path.exists("adivinha.ui"):
-            QMessageBox.critical(self, "Erro", "Arquivo 'adivinha.ui' não encontrado.")
+        if not os.path.exists(ui_path):
+            QMessageBox.critical(self, "Erro", f"Arquivo 'adivinha.ui' não encontrado em:\n{ui_path}")
             sys.exit(1)
 
         # Carrega a interface
-        loadUi("adivinha.ui", self)
+        loadUi(ui_path, self)
 
         # Conecta os botões às funções
         self.continuar.clicked.connect(self.continuar_jogo)
@@ -44,8 +56,6 @@ class MinhaJanela(QMainWindow):
 
         self.lineEdit.clear()
 
-
-# Executa o aplicativo
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     janela = MinhaJanela()

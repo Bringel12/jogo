@@ -5,7 +5,7 @@ a = Analysis(
     ['maide.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('adivinha.ui', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
